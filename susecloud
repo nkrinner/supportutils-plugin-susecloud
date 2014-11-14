@@ -140,11 +140,12 @@ _capture_filter() {
 
                 # connection=postgresql://nova:s3kr1t@192.168.124.81/nova
                 -e 's!^\( *\([a-z_]\+_\)\?connection[a-z_]*=[a-z]\+://[a-z_]\+:\)[^@]\+@!\1'"$CENSORED"'@!'
-		# Filter passwords from crowbar batch export output
+
+                # Filter passwords from crowbar batch export output
                 # [   ] password: p4ssw0rt
-		# [   ] service_password: service_p4ssw0rt
-		# [   ] stack_domain_admin_password: 4dm1n_p4ssw0rt
-                -e 's/\(^ *\(stack_domain_admin_\|service_\)\?password:\).*/\1 '$CENSORED'/'
+                # [   ] service_password: service_p4ssw0rt
+                # [   ] stack_domain_admin_password: 4dm1n_p4ssw0rt
+                -e 's/^\( *\([a-z_]\+_\)\?password:\).*/\1 '"$CENSORED"'/gi'
         )
         if (( ADD_OPTION_LOGS )); then
                 sed_args+=( -e 's/^M//g' )
