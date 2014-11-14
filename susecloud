@@ -92,13 +92,13 @@ _filter_test_cases() {
     "bmc_password": "s3kr1t",
     "machine-install": { "password": "s3kr1t" },
 web_ui_admin_default_password "s3kr1t"
-.... "bmc_user"=>"root", "bmc_password"=>"cr0wBar!"}, {"token"=>"l33t", ...
+..#.. "bmc_user"=>"root", "bmc_password"=>"cr0wBar!"}, {"token"=>"l33t", ...
 neutron_admin_password=s3kr1t
 rabbit_password=s3kr1t
 connection=postgresql://nova:s3kr1t@192.168.124.81/nova
-password: p4ssw0rt
-service_password: service_p4ssw0rt
-stack_domain_admin_password: 4dm1n_p4ssw0rt
+   password: p4ssw0rt
+   service_password: service_p4ssw0rt
+   stack_domain_admin_password: 4dm1n_p4ssw0rt
 EOF
 }
 
@@ -114,9 +114,9 @@ web_ui_admin_default_password "$CENSORED"
 neutron_admin_password=$CENSORED
 rabbit_password=$CENSORED
 connection=postgresql://nova:$CENSORED@192.168.124.81/nova
-password: $CENSORED
-service_password: $CENSORED
-stack_domain_admin_password: $CENSORED
+   password: $CENSORED
+   service_password: $CENSORED
+   stack_domain_admin_password: $CENSORED
 EOF
 )
 
@@ -141,11 +141,11 @@ _capture_filter() {
                 # connection=postgresql://nova:s3kr1t@192.168.124.81/nova
                 -e 's!^\( *\([a-z_]\+_\)\?connection[a-z_]*=[a-z]\+://[a-z_]\+:\)[^@]\+@!\1'"$CENSORED"'@!'
 		# Filter passwords from crowbar batch export output
-                # ... password:
-		-e 's/^\( * "string to find the password"  / "what stays after replacing the password  /i'
-		# ... service_password:
-		# ... stack_domain_admin_password:
-                -e 's!^\( *\([a-z_]\+_\)\?connection[a-z_]*=[a-z]\+://[a-z_]\+:\)[^@]\+@!\1'"$CENSORED"'@!'
+                # ... password: p4ssw0rt
+		# ... service_password: service_p4ssw0rt
+		# ... stack_domain_admin_password: 4dm1n_p4ssw0rt
+                -e 's/\(^ *\(stack_domain_admin_\|service_\)\?password:\).*/\1 '$CENSORED'/'
+
         )
         if (( ADD_OPTION_LOGS )); then
                 sed_args+=( -e 's/^M//g' )
